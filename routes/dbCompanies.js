@@ -20,7 +20,21 @@ class dbCompanies{
 
         try{
 
-            const result = await db.query(`SELECT * FROM companies WHERE code = $1`, [company]);
+            let result = await db.query(`SELECT * FROM companies AS c JOIN invoices as i ON i.comp_code = c.code WHERE code = $1`, [company]);
+
+            if(result.rows.length != 0){
+
+                let {code, name, description} = result.rows[0];
+
+                let invoices = result.rows.map(r => {return {"id":r.id, "amt":r.amt, "paid":r.paid, "add_date":r.add_date, "paid_date":r.paid_date}});
+
+                result = {code, name, description, invoices};
+
+            }else{
+
+                result = {status: 404}
+
+            }
 
             return result;
 

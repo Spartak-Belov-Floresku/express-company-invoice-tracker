@@ -8,7 +8,7 @@ let DB_URL = {
     database: ""
 }
 
-DB_URL.database = (process.env.NODE_ENV === "test")? "biztime_test": "biztime";
+DB_URL.database = (process.env.NODE_ENV === "test")? "biztime": "biztime";
 
 
 let db = new Client(DB_URL);

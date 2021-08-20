@@ -11,7 +11,7 @@ router.get("/", async (req, res, next) => {
 
   if(!result.message){
 
-    return result.rows.length? res.json({invoices :result.rows}): res.status(404).json({companies : `db is empty`});
+    return result.rows.length? res.json({invoices :result.rows}): res.status(404).json({invoices : `db is empty`});
 
   }
 
@@ -24,8 +24,16 @@ router.get("/:id", async (req, res, next) => {
   const result = await dbInvoices.getInvoice(req.params.id);
 
   if(!result.message){
+    
+    if(result.status != 404){
 
-    return result.rows.length != 0? res.json({ invoice :result.rows[0]}): res.status(404).json({ invoice : `id ${req.params.id} does not exist`});
+      return res.json({invoice: result});
+
+    }else if(result.status == 404){
+
+      return res.status(404).json({invoice :  `There is no invoice with id of ${req.params.id}`});
+
+    }
 
   }
 

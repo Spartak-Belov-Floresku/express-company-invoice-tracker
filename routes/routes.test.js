@@ -54,13 +54,13 @@ describe("GET /companies/:code and /invoices/:id", () => {
     test("Gets a single company", async () => {
       const response = await request(app).get(`/companies/${testCompany.code}`);
       expect(response.statusCode).toEqual(200);
-      expect(response.body).toEqual({company: testCompany});
+      expect(response.body.company.code).toEqual(testCompany.code);
     });
 
     test("Gets a single invoice", async () => {
         const response = await request(app).get(`/invoices/${testInvoice.id}`);
         expect(response.statusCode).toEqual(200);
-        expect(response.body.invoice.comp_code).toEqual(testCompany.code);
+        expect(response.body.invoice.company.code).toEqual(testCompany.code);
       });
   
     test("Responds with 404 if can't find company", async () => {

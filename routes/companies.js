@@ -24,9 +24,13 @@ router.get("/:code", async (req, res, next) => {
    
     const result = await dbCompanies.getCompany(req.params.code);
 
-    if(!result.message){
+    if(result.status != 404){
 
-      return result.rows.length? res.json({company : result.rows[0]}): next({message:`${req.params.code} does not exist`, status: 404});
+      return res.json({company: result});
+
+    }else if(result.status == 404){
+
+      return res.status(404).json({company :  `There is no company with code of ${req.params.code}`});
 
     }
 

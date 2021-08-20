@@ -16,11 +16,28 @@ class dbInvoices{
         }
     }
 
-    static async getInvoice(id){
+    static async getInvoice(num){
 
         try{
 
-            const result = await db.query(`SELECT * FROM invoices i JOIN companies c ON i.comp_code = c.code WHERE id = $1`, [id]);
+            let result = await db.query(`SELECT * FROM invoices i JOIN companies c ON i.comp_code = c.code WHERE id = $1`, [num]);
+
+            if(result.rows.length != 0){
+
+                let {id, amt, paid, add_date, paid_date} = result.rows[0];
+
+                let company = {};
+                company.code = result.rows[0].code;
+                company.name = result.rows[0].name;
+                company.description = result.rows[0].description;
+                
+                result  = {id, amt, paid, add_date, paid_date, company};
+
+            }else{
+
+                result = {status: 404}
+
+            }
 
             return result;
 
